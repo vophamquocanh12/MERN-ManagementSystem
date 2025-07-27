@@ -31,11 +31,11 @@ router.get("/me", verifyToken, getOwnEmployeeProfile);
 // ✅ Update Own Profile (Employee) - with photo
 router.put("/profile", verifyToken, uploadMemory.single("photo"), updateEmployeeProfile);
 
-// ✅ Admin Delete Employee
-router.delete("/:id", verifyToken, verifyRole("admin"), deleteEmployee);
-
 // ✅ Admin Search Employees
 router.get("/search", verifyToken, verifyRole("admin"), searchEmployeesByName);
+
+// ✅ Admin Delete Employee
+router.delete("/:id", verifyToken, verifyRole("admin"), deleteEmployee);
 
 // ✅ Upload Resume (Admin or Employee)
 router.put("/upload-resume/:id", verifyToken, uploadMemory.single("resume"), uploadResume);
