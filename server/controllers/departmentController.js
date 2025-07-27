@@ -73,8 +73,12 @@ const getDepartment = async (req, res) => {
 const updateDepartment = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
-    const updated = await Department.findByIdAndUpdate(id, { name }, { new: true });
+    const { name, description } = req.body;
+    const updated = await Department.findByIdAndUpdate(
+      id,
+      { name, description },
+      { new: true }
+    );
     return res.status(200).json({ success: true, department: updated });
   } catch (error) {
     return res.status(500).json({ success: false, error: "update department server error" });
