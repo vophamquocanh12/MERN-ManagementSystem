@@ -32,13 +32,13 @@ const getDepartmentsWithCount = async (req, res) => {
 // ✅ Add new department
 const addDepartment = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, description } = req.body;
     const existing = await Department.findOne({ name });
     if (existing) {
       return res.status(400).json({ success: false, error: "Department already exists" });
     }
 
-    const newDep = await Department.create({ name });
+    const newDep = await Department.create({ name, description });
     return res.status(201).json({ success: true, department: newDep });
   } catch (error) {
     return res.status(500).json({ success: false, error: "add department server error" });
