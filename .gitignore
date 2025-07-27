@@ -1,0 +1,69 @@
+# ===============================
+# 📦 GENERAL NODE PROJECT
+# ===============================
+node_modules/
+dist/
+build/
+temp/
+tmp/
+.cache/
+
+# ===============================
+# 🛠 ENV FILES
+# ===============================
+.env
+.env.*.local
+.env.local
+.env.development
+.env.production
+
+# ===============================
+# ⚡ VITE / FRONTEND (client/)
+# ===============================
+client/node_modules/
+client/dist/
+client/.vite/
+client/package-lock.json
+client/yarn.lock
+client/.env.development
+client/.env.production
+client/.DS_Store
+
+# Optional IDE/editor config
+client/.vscode/
+client/.idea/
+client/*.sublime-*
+
+# ===============================
+# 🚀 BACKEND (server/)
+# ===============================
+server/node_modules/
+server/dist/
+server/logs/
+server/.env
+server/.env.*.local
+server/debug.log
+server/package-lock.json
+server/yarn.lock
+
+# Optional IDE/editor config
+server/.vscode/
+server/.idea/
+server/*.sublime-*
+
+# ===============================
+# 📸 COVERAGE / LOG FILES
+# ===============================
+coverage/
+*.lcov
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===============================
+# 💻 SYSTEM FILES
+# ===============================
+.DS_Store
+Thumbs.db
