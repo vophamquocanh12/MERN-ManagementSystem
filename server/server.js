@@ -94,4 +94,7 @@ ENDPOINT
 6. Xóa nhân viên
 7. Upload ảnh (nếu có)
 8. Tìm kiếm nhân viên (admin only)
+9. Tạo phòng ban
+10. Cập nhật phòng ban
+11. Xóa phòng ban
 */ 
