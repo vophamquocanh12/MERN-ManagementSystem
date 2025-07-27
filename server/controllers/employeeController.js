@@ -313,14 +313,34 @@ export const getOwnEmployeeProfile = async (req, res) => {
 
 // ✅ Get Employee by ID (Admin)
 export const getEmployeeById = async (req, res) => {
-  const { id } = req.params;
-  const user = await User.findById(id)
-    .select("-password")
-    .populate("department");
-  const employee = await Employee.findOne({ user: id });
+  try {
+    const { id } = req.params;
+    // Lấy thông tin User
+    const user = await User.findById(id).select("-password");
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    // Lấy thông tin Employee liên kết với user
+    const employee = await Employee.findOne({ user: id })
+      .populate("department", "name") // chỉ lấy trường name trong Department
+      .populate("attendance") // có thể giới hạn các field nếu muốn
+      .populate("salary");
+      
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Employee profile not found" });
+    }
 
-  if (!user)
-    return res.status(404).json({ success: false, error: "User not found" });
-
-  res.json({ success: true, user, employee });
+    return res.status(200).json({
+      success: true,
+      user,
+      employee,
+    });
+  } catch (error) {
+    console.error("❌ Error in getEmployeeById:", error);
+    res
+      .status(500)
+      .json({ success: false, error: "Failed to retrieve employee" });
+  }
 };
