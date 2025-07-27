@@ -8,6 +8,7 @@ import {
   updateEmployeeProfile,
   getAllEmployees,
   updateAnyEmployeeProfile,
+  deleteEmployee,
   getOwnEmployeeProfile,
   getEmployeeById,
   uploadResume,
@@ -28,6 +29,9 @@ router.get("/me", verifyToken, getOwnEmployeeProfile);
 
 // ✅ Update Own Profile (Employee) - with photo
 router.put("/profile", verifyToken, uploadMemory.single("photo"), updateEmployeeProfile);
+
+// ✅ Admin Delete Employee
+router.delete("/:id", verifyToken, verifyRole("admin"), deleteEmployee);
 
 // ✅ Upload Resume (Admin or Employee)
 router.put("/upload-resume/:id", verifyToken, uploadMemory.single("resume"), uploadResume);

@@ -167,6 +167,27 @@ export const getAllEmployees = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+// ✅ 5. Admin Delete Employee
+export const deleteEmployee = async (req, res) => {
+  try {
+    const employeeId = req.params.id;
+
+    // Kiểm tra xem user tồn tại và có phải employee không
+    const employee = await User.findById(employeeId);
+    if (!employee || employee.role !== "employee") {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found." });
+    }
+
+    await User.findByIdAndDelete(employeeId);
+
+    res.status(200).json({ success: true, message: "Employee deleted successfully." });
+  } catch (err) {
+    console.error("Delete employee error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
 
 // Upload Resume
 export const uploadResume = async (req, res) => {
