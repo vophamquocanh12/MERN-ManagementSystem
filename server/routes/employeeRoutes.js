@@ -9,6 +9,7 @@ import {
   getAllEmployees,
   updateAnyEmployeeProfile,
   deleteEmployee,
+  searchEmployeesByName,
   getOwnEmployeeProfile,
   getEmployeeById,
   uploadResume,
@@ -32,6 +33,9 @@ router.put("/profile", verifyToken, uploadMemory.single("photo"), updateEmployee
 
 // ✅ Admin Delete Employee
 router.delete("/:id", verifyToken, verifyRole("admin"), deleteEmployee);
+
+// ✅ Admin Search Employees
+router.get("/search", verifyToken, verifyRole("admin"), searchEmployeesByName);
 
 // ✅ Upload Resume (Admin or Employee)
 router.put("/upload-resume/:id", verifyToken, uploadMemory.single("resume"), uploadResume);

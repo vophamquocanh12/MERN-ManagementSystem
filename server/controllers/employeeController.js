@@ -189,6 +189,28 @@ export const deleteEmployee = async (req, res) => {
   }
 };
 
+// ✅ 6. Admin Search Employees by Name
+export const searchEmployeesByName = async (req, res) => {
+  try {
+    const { name } = req.query;
+
+    if (!name) {
+      return res.status(400).json({ success: false, message: "Missing name query parameter." });
+    }
+
+    // Tìm những user có role là "employee" và tên khớp (không phân biệt hoa thường)
+    const employees = await User.find({
+      role: "employee",
+      name: { $regex: name, $options: "i" }, // i: ignore case
+    });
+
+    res.status(200).json({ success: true, employees });
+  } catch (err) {
+    console.error("Search employee error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 // Upload Resume
 export const uploadResume = async (req, res) => {
   try {
