@@ -62,11 +62,19 @@ export const getAllSalaries = async (req, res) => {
  */
 export const getSalaryByEmployee = async (req, res) => {
   try {
-    const employeeId = req.user._id;
-    const salaries = await Salary.find({ employee: employeeId }).sort({
-      paidDate: -1,
-    });
+    const userId = req.user._id;
 
+    // Tìm Employee tương ứng với user đó
+    const employee = await Employee.findOne({ user: userId });
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Employee not found" });
+    }
+    // Tìm tất cả bản ghi lương của employee này
+    const salaries = await Salary.find({ employee: employee._id }).sort({
+      month: -1,
+    });
     res.status(200).json({ success: true, salaries });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
