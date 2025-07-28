@@ -10,32 +10,20 @@ import User from "../models/User.js";
  */
 export const createSalaryRecord = async (req, res) => {
   try {
-    const { employee, amount, paidDate, bonus, deductions, remarks } = req.body;
+    const { employee, month, basePay, bonus, deductions, remarks } =
+      req.body;
 
-    const totalPay = amount + (bonus || 0) - (deductions || 0);
+    const totalPay = basePay + (bonus || 0) - (deductions || 0);
 
     const salary = await Salary.create({
       employee,
-      amount,
+      month,
+      basePay,
       bonus,
       deductions,
       totalPay,
-      paidDate,
       remarks,
-    });
-
-    // 📧 Notify Admins
-    const emp = await Employee.findById(employee);
-    const admins = await User.find({ role: "admin" });
-
-    for (const admin of admins) {
-      await sendEmail({
-        to: admin.email,
-        subject: `Salary Added for ${emp.name}`,
-        title: "New Salary Record",
-        message: `Salary for <strong>${emp.name}</strong> for the month of <strong>${paidDate}</strong> has been added with a total pay of <strong>£${totalPay}</strong>.`,
-      });
-    }
+    });createSalaryRecord;
 
     res.status(201).json({ success: true, salary });
   } catch (err) {
