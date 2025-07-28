@@ -65,7 +65,7 @@ export const createEmployee = async (req, res) => {
 // ✅ 2. Employee Updates Their Own Profile
 export const updateEmployeeProfile = async (req, res) => {
   try {
-    const { name, email, bio, skills } = req.body;
+    const { name, email, bio, skills, department } = req.body;
     const userId = req.user._id;
 
     let photoUrl = null;
