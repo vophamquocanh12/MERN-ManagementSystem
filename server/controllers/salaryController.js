@@ -10,8 +10,15 @@ import User from "../models/User.js";
  */
 export const createSalaryRecord = async (req, res) => {
   try {
-    const { employee, month, basePay, bonus, deductions, remarks } =
-      req.body;
+    const { employee, month, basePay, bonus, deductions, remarks } = req.body;
+
+     const existingSalary = await Salary.findOne({ employee, month });
+     if (existingSalary) {
+       return res.status(400).json({
+         success: false,
+         message: `Salary for employee in month ${month} already exists.`,
+       });
+     }
 
     const totalPay = basePay + (bonus || 0) - (deductions || 0);
 
@@ -23,8 +30,10 @@ export const createSalaryRecord = async (req, res) => {
       deductions,
       totalPay,
       remarks,
-    });createSalaryRecord;
-
+    });
+    await Employee.findByIdAndUpdate(employee, {
+      $push: { salary: salary._id },
+    });
     res.status(201).json({ success: true, salary });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -54,7 +63,9 @@ export const getAllSalaries = async (req, res) => {
 export const getSalaryByEmployee = async (req, res) => {
   try {
     const employeeId = req.user._id;
-    const salaries = await Salary.find({ employee: employeeId }).sort({ paidDate: -1 });
+    const salaries = await Salary.find({ employee: employeeId }).sort({
+      paidDate: -1,
+    });
 
     res.status(200).json({ success: true, salaries });
   } catch (err) {
@@ -75,7 +86,7 @@ export const getMonthlyPayrollSummary = async (req, res) => {
           total: { $sum: "$totalPay" },
         },
       },
-      { $sort: { "_id": 1 } },
+      { $sort: { _id: 1 } },
     ]);
 
     const formatted = Array.from({ length: 12 }, (_, i) => ({
@@ -133,7 +144,7 @@ export const getMonthlySalaryStats = async (req, res) => {
           totalSalary: { $sum: "$amount" },
         },
       },
-      { $sort: { "_id": 1 } },
+      { $sort: { _id: 1 } },
     ]);
 
     const formatted = Array.from({ length: 12 }, (_, i) => ({
@@ -154,13 +165,15 @@ export const getSalaryStats = async (req, res) => {
         $group: {
           _id: { $month: "$createdAt" },
           total: { $sum: "$amount" },
-        }
+        },
       },
-      { $sort: { _id: 1 } }
+      { $sort: { _id: 1 } },
     ]);
 
     const formatted = stats.map((s) => ({
-      month: new Date(2000, s._id - 1).toLocaleString("default", { month: "short" }),
+      month: new Date(2000, s._id - 1).toLocaleString("default", {
+        month: "short",
+      }),
       total: s.total,
     }));
 
@@ -169,5 +182,3 @@ export const getSalaryStats = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-
