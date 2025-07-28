@@ -12,13 +12,13 @@ export const createSalaryRecord = async (req, res) => {
   try {
     const { employee, month, basePay, bonus, deductions, remarks } = req.body;
 
-     const existingSalary = await Salary.findOne({ employee, month });
-     if (existingSalary) {
-       return res.status(400).json({
-         success: false,
-         message: `Salary for employee in month ${month} already exists.`,
-       });
-     }
+    const existingSalary = await Salary.findOne({ employee, month });
+    if (existingSalary) {
+      return res.status(400).json({
+        success: false,
+        message: `Salary for employee in month ${month} already exists.`,
+      });
+    }
 
     const totalPay = basePay + (bonus || 0) - (deductions || 0);
 
@@ -90,7 +90,7 @@ export const getMonthlyPayrollSummary = async (req, res) => {
     const summary = await Salary.aggregate([
       {
         $group: {
-          _id: { $month: "$paidDate" },
+          _id: "$month",
           total: { $sum: "$totalPay" },
         },
       },
