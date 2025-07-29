@@ -84,6 +84,26 @@ const DepartmentList = () => {
     }
   };
 
+  const customStyles = {
+    rows: {
+      style: {
+        fontSize: "30px"
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: "30px",
+        fontWeight: "bold"
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: "8px",
+        paddingRight: "8px"
+      },
+    },
+  };
+
   const columns = [
     { name: "#", selector: (row, i) => i + 1, width: "60px" },
     { name: "Name", selector: (row) => row.name, sortable: true },
@@ -135,6 +155,7 @@ const DepartmentList = () => {
         highlightOnHover
         striped
         responsive
+        customStyles={customStyles}
       />
 
       {modalOpen && (
