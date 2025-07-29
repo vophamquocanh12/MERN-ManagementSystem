@@ -92,10 +92,10 @@ const DepartmentList = () => {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
-          <button onClick={() => handleEdit(row)} className="text-blue-600 hover:underline">
+          <button onClick={() => handleEdit(row)} className="text-blue-600 hover:underline text-3xl">
             <FaEdit />
           </button>
-          <button onClick={() => handleDelete(row._id)} className="text-red-600 hover:underline">
+          <button onClick={() => handleDelete(row._id)} className="text-red-600 hover:underline text-3xl">
             <FaTrash />
           </button>
         </div>
