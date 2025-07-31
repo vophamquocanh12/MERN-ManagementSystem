@@ -56,26 +56,8 @@ export const createEmployee = async (req, res) => {
 // ✅ 2. Employee Updates Their Own Profile
 export const updateEmployeeProfile = async (req, res) => {
   try {
-    const { name, email, bio, skills, department } = req.body;
+    const { name, email, bio, skills } = req.body;
     const userId = req.user._id;
-
-    let photoUrl = null;
-    if (req.file && req.file.buffer) {
-      const streamUpload = () =>
-        new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "ems_profiles" },
-            (error, result) => {
-              if (result) resolve(result);
-              else reject(error);
-            }
-          );
-          stream.end(req.file.buffer);
-        });
-
-      const result = await streamUpload();
-      photoUrl = result.secure_url;
-    }
 
     const user = await User.findByIdAndUpdate(
       userId,
@@ -85,7 +67,7 @@ export const updateEmployeeProfile = async (req, res) => {
 
     const employee = await Employee.findOneAndUpdate(
       { user: userId },
-      { bio, skills, ...(photoUrl && { photoUrl }) },
+      { bio, skills },
       { new: true, upsert: true }
     );
 
