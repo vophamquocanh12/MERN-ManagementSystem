@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const SalarySchema = new mongoose.Schema({
-  employee: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "User", 
-    required: true 
+  employee: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Employee",
+    required: true,
   },
   month: {
     type: String,
@@ -31,9 +31,9 @@ const SalarySchema = new mongoose.Schema({
   remarks: {
     type: String,
   },
-  createdAt: { 
-    type: Date, 
-    default: Date.now 
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

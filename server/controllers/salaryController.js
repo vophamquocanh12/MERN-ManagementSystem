@@ -46,9 +46,14 @@ export const createSalaryRecord = async (req, res) => {
  */
 export const getAllSalaries = async (req, res) => {
   try {
-    const salaries = await Salary.find()
-      .populate("employee", "name department")
-      .sort({ paidDate: -1 });
+    const salaries = await Salary.find().populate({
+      path: "employee",
+      populate: {
+        path: "user", // ↩ populate tới User
+        select: "name", // ↩ lấy trường name
+      },
+      select: "department designation", // các field bạn muốn lấy từ Employee
+    }).sort({ paidDate: -1 });
 
     res.status(200).json({ success: true, salaries });
   } catch (err) {

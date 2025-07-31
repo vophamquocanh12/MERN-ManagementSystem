@@ -11,27 +11,9 @@ import { log } from "console";
 
 // ✅ 1. Create New Employee (Admin Only)
 export const createEmployee = async (req, res) => {
-  // try {
-  //   const { name, email, department, password, role } = req.body;
-
-  //   const hashed = await bcrypt.hash(password, 10);
-
-  //   const newUser = await User.create({
-  //     name,
-  //     email,
-  //     password: hashed,
-  //     role,
-  //     department,
-  //   });
-
-  //   res.status(201).json({ success: true, user: newUser });
-  // } catch (err) {
-  //   console.error("Employee creation error:", err);
-  //   res.status(500).json({ success: false, error: err.message });
-  // }
   try {
-    const { name, email, password, department, position, salary } = req.body;
-    if (!name || !email || !password || !department || !position || !salary) {
+    const { name, email, password, department, skills } = req.body;
+    if (!name || !email || !password || !department) {
       return res
         .status(400)
         .json({ success: false, message: "Missing required fields." });
@@ -46,19 +28,28 @@ export const createEmployee = async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
+    // Create User
     const newUser = await User.create({
       name,
       email,
       password: hashed,
       role: "employee", // default role
-      department,
-      position,
-      salary,
     });
-     res.status(201).json({ success: true, user: newUser });
+    await newUser.save();
+
+    // Create Employee
+    const newEmployee = await Employee.create({
+      user: newUser._id,
+      department,
+      bio: req.body.bio || "",
+      skills: req.body.skills || [],
+    });
+
+    await newEmployee.save();
+    res.status(201).json({ success: true, employee: newEmployee });
   } catch (error) {
-    console.error("Employee creation error:", err);
-   res.status(500).json({ success: false, error: err.message });
+    console.error("Employee creation error:", error);
+    res.status(500).json({ success: false, error: error.message });
   }
 };
 
@@ -115,43 +106,37 @@ export const updateEmployeeProfile = async (req, res) => {
 // ✅ 3. Admin Updates Any Employee’s Profile
 export const updateAnyEmployeeProfile = async (req, res) => {
   try {
-    const { id } = req.params; // Employee's user ID
-    const { name, email, bio } = req.body;
+    const employeeId = req.params.id;
+    const { name, email, bio, skills, department } = req.body;
 
-    let photoUrl = null;
-    if (req.file && req.file.buffer) {
-      const streamUpload = () =>
-        new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "ems_profiles" },
-            (error, result) => {
-              if (result) resolve(result);
-              else reject(error);
-            }
-          );
-          stream.end(req.file.buffer);
-        });
-
-      const result = await streamUpload();
-      photoUrl = result.secure_url;
+    // Update Employee
+    const employee = await Employee.findByIdAndUpdate(employeeId);
+    if (!employee) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Employee not found" });
     }
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { name, email },
-      { new: true }
-    );
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found" });
+    if (department) {
+      employee.department = department;
     }
+    if (bio) {
+      employee.bio = bio;
+    }
+    if (skills) {
+      employee.skills = skills;
+    }
+    await employee.save();
 
-    const employee = await Employee.findOneAndUpdate(
-      { user: id },
-      { bio, ...(photoUrl && { photoUrl }) },
-      { new: true, upsert: true }
-    );
-
-    res.status(200).json({ success: true, user, employee });
+    const user = await User.findById(employee.user);
+    if (name) {
+      user.name = name;
+    }
+    if (email) {
+      user.email = email;
+    }
+    await user.save();
+    res.status(200).json({ success: true, employee });
   } catch (error) {
     console.error("Admin profile update error:", error);
     res.status(500).json({ success: false, error: "Failed to update profile" });
@@ -160,7 +145,9 @@ export const updateAnyEmployeeProfile = async (req, res) => {
 // ✅ 4. Get employee list (admin only)
 export const getAllEmployees = async (req, res) => {
   try {
-    const employees = await User.find({ role: "employee" }).select("-password");
+    const employees = await Employee.find()
+      .populate("user", "name email")
+      .populate("department", "name");
     res.status(200).json({ success: true, employees });
   } catch (err) {
     console.error("Get employees error:", err);
@@ -182,7 +169,9 @@ export const deleteEmployee = async (req, res) => {
 
     await User.findByIdAndDelete(employeeId);
 
-    res.status(200).json({ success: true, message: "Employee deleted successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Employee deleted successfully." });
   } catch (err) {
     console.error("Delete employee error:", err);
     res.status(500).json({ success: false, error: err.message });
@@ -195,7 +184,9 @@ export const searchEmployeesByName = async (req, res) => {
     const { name } = req.query;
 
     if (!name) {
-      return res.status(400).json({ success: false, message: "Missing name query parameter." });
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing name query parameter." });
     }
 
     // Tìm những user có role là "employee" và tên khớp (không phân biệt hoa thường)
@@ -325,7 +316,7 @@ export const getEmployeeById = async (req, res) => {
       .populate("department", "name") // chỉ lấy trường name trong Department
       .populate("attendance") // có thể giới hạn các field nếu muốn
       .populate("salary");
-      
+
     if (!employee) {
       return res
         .status(404)
