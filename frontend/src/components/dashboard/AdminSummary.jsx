@@ -57,8 +57,8 @@ const AdminSummary = () => {
     },
     {
       icon: <FaMoneyCheckAlt />,
-      label: "Monthly Payroll",
-      count: `£${stats.monthlyPayroll?.toLocaleString() ?? 0}`,
+      label: "Total Salary Payable",
+      count: `£${stats.totalSalay?.toLocaleString() ?? 0}`,
       color: "bg-purple-500",
     },
     {
