@@ -1,9 +1,9 @@
-import User from "../models/User.js";
 import Department from "../models/Department.js";
+import Employee from "../models/Employee.js";
 
 export const getAdminStats = async (req, res) => {
   try {
-    const employeesCount = await User.countDocuments({ role: "employee" });
+    const employeesCount = await Employee.countDocuments();
     const departmentsCount = await Department.countDocuments();
 
     // Add dummy stats or real if you have them

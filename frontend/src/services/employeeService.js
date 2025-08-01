@@ -21,8 +21,10 @@ export const getAllEmployees = async () => {
 // API searchEmployeesByName (admin only)
 // Tìm kiếm nhân viên theo tên
 export const searchEmployeesByName = async (name) => {
-  const res = await api.get(`/employees/search?name=${name}`); 
-  return res.data.employees;
+  const res = await api.get(
+    `/employees/search?name=${encodeURIComponent(name)}`
+  );
+  return res.data;
 }
 
 // API getEmployeeById (admin only)
@@ -50,25 +52,14 @@ export const updateAnyEmployeeProfile = async (id, data) => {
 // Xóa nhân viên theo ID
 export const deleteEmployee = async (id) => {
   const res = await api.delete(`/employees/${id}`);
-  return res.data.employees;
+  return res.data;
 }
 
 // API updateOwnProfile (employee)
 // Cập nhật thông tin cá nhân của nhân viên
-export const updateEmployeeProfile = async (data, file) => {
-  const formDate = new FormData();
-  Object.entries(data).forEach(([key, value]) => {
-    formDate.append(key, value);
-  });
-  if (file) {
-    formDate.append("file", file);
-  }
-  const res = await api.put("/employees/profile", formDate, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return res.data;
+export const updateEmployeeProfile = async (data) => {
+ const res = await api.put("/profile", data);
+ return res.data;
 }
 
 // API getOwnEmployeeProfile (employee)
