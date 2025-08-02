@@ -4,12 +4,12 @@ import { FaUserAlt, FaCalendarCheck, FaCalendarAlt, FaMoneyBill, FaCogs, FaEye }
 
 const EmployeeSidebar = () => {
   const navItems = [
-    { label: "Profile", icon: <FaUserAlt />, to: "/employee-dashboard/profile" },
-    { label: "View Profile", icon: <FaEye />, to: "/employee-dashboard/profile/view" },
-    { label: "Leave", icon: <FaCalendarCheck />, to: "/employee-dashboard/leave" },
-    { label: "Salary", icon: <FaMoneyBill />, to: "/employee-dashboard/salary" },
-    { label: "Attendance Heatmap", icon: <FaCalendarAlt />, to: "/employee-dashboard/attendance-heatmap" },
-    { label: "Settings", icon: <FaCalendarAlt />, to: "/employee-dashboard/settings" },
+    { label: "Hồ sơ", icon: <FaUserAlt />, to: "/employee-dashboard/profile" },
+    { label: "Xem hồ sơ", icon: <FaEye />, to: "/employee-dashboard/profile/view" },
+    //{ label: "Leave", icon: <FaCalendarCheck />, to: "/employee-dashboard/leave" },
+    { label: "Lương", icon: <FaMoneyBill />, to: "/employee-dashboard/salary" },
+    //{ label: "Attendance Heatmap", icon: <FaCalendarAlt />, to: "/employee-dashboard/attendance-heatmap" },
+    //{ label: "Settings", icon: <FaCalendarAlt />, to: "/employee-dashboard/settings" },
   ];
 
   return (

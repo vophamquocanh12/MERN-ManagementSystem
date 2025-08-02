@@ -106,10 +106,10 @@ const DepartmentList = () => {
 
   const columns = [
     { name: "#", selector: (row, i) => i + 1, width: "60px" },
-    { name: "Name", selector: (row) => row.name, sortable: true },
-    { name: "Description", selector: (row) => row.description },
+    { name: "Tên phòng ban", selector: (row) => row.name, sortable: true },
+    { name: "Chi tiết mô tả", selector: (row) => row.description },
     {
-      name: "Actions",
+      name: "Hành động",
       cell: (row) => (
         <div className="flex gap-2">
           <button onClick={() => handleEdit(row)} className="text-blue-600 hover:underline text-3xl">
@@ -125,25 +125,25 @@ const DepartmentList = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Manage Departments</h2>
+      <h2 className="text-xl font-semibold mb-4">Quản lý phòng ban</h2>
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <input
           type="text"
-          placeholder="Search by name..."
+          placeholder="Tìm kiếm theo tên"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="px-3 py-2 border rounded w-full max-w-sm"
         />
         <div className="flex gap-3">
-          <button onClick={() => exportToExcel(filtered, "departments.xlsx")} className="bg-green-600 text-white px-3 py-1 rounded">
+          {/* <button onClick={() => exportToExcel(filtered, "departments.xlsx")} className="bg-green-600 text-white px-3 py-1 rounded">
             Export to Excel
           </button>
           <button onClick={() => exportToPDF(filtered, "Departments Report")} className="bg-red-600 text-white px-3 py-1 rounded">
             Export to PDF
-          </button>
+          </button> */}
           <button onClick={handleAdd} className="bg-blue-600 text-white px-4 py-1 rounded">
-            + Add Department
+            + Thêm phòng ban
           </button>
         </div>
       </div>
@@ -175,14 +175,14 @@ const DepartmentList = () => {
               <input
                 name="name"
                 defaultValue={editData?.name || ""}
-                placeholder="Department Name"
+                placeholder="Tên phòng ban"
                 required
                 className="w-full border p-2 rounded mb-3"
               />
               <textarea
                 name="description"
                 defaultValue={editData?.description || ""}
-                placeholder="Description"
+                placeholder="Chi tiết mô tả"
                 className="w-full border p-2 rounded mb-3"
               />
               <div className="flex justify-end gap-2">
@@ -194,7 +194,7 @@ const DepartmentList = () => {
                   Cancel
                 </button>
                 <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
-                  {editData ? "Update" : "Create"}
+                  {editData ? "Cập nhật" : "Tạo mới"}
                 </button>
               </div>
             </form>

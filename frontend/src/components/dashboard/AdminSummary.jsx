@@ -45,19 +45,19 @@ const AdminSummary = () => {
   const summaryData = [
     {
       icon: <FaUsers />,
-      label: "Total Employees",
+      label: "Tổng số nhân viên",
       count: stats.employeesCount,
       color: "bg-teal-500",
     },
     {
       icon: <FaBuilding />,
-      label: "Departments",
+      label: "Tổng số phòng ban",
       count: stats.departmentsCount,
       color: "bg-yellow-500",
     },
     {
       icon: <FaMoneyCheckAlt />,
-      label: "Total Salary Payable",
+      label: "Tổng tiên lương",
       count: `£${stats.totalSalay?.toLocaleString() ?? 0}`,
       color: "bg-purple-500",
     },
