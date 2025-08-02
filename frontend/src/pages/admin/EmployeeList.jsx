@@ -99,25 +99,26 @@ const EmployeeList = () => {
   const customStyles = {
     rows: {
       style: {
-        fontSize: "30px",
+        fontSize: "24px",
+        textAlign: "center",
       },
     },
     headCells: {
       style: {
-        fontSize: "30px",
+        fontSize: "24px",
         fontWeight: "bold",
       },
     },
     cells: {
       style: {
-        paddingLeft: "8px",
-        paddingRight: "8px",
+        paddingLeft: "5px",
+        paddingRight: "5px",
       },
     },
   };
 
   const columns = [
-    { name: "#", selector: (row, i) => i + 1, withh: "60px" },
+    { name: "#", selector: (row, i) => i + 1, with: "10px" },
     {
       name: "Tên nhân viên",
       selector: (row) => row.user?.name,
@@ -132,7 +133,7 @@ const EmployeeList = () => {
     },
     {
       name: "Lương",
-      selector: (row) => row.salary?.totalPay || 0,
+      selector: (row) => row.salary?.[0]?.totalPay.toLocaleString() || 0,
       sortable: true,
     },
     {

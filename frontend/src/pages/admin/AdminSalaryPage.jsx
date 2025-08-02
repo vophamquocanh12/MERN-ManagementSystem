@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 // src/pages/admin/AdminSalaryPage.jsx
 import { useEffect, useState } from "react";
@@ -125,15 +126,21 @@ const AdminSalaryPage = () => {
     },
     { name: "Tháng", selector: (row) => row.month },
     {
-      name: "Lương cơ bản (VNĐ)",
-      selector: (row) => row.basePay,
+      name: "Lương cơ bản",
+      selector: (row) => row.basePay.toLocaleString(),
       sortable: true,
     },
-    { name: "Thưởng (VNĐ)", selector: (row) => row.bonuses || 0 },
-    { name: "Khấu trừ (VNĐ)", selector: (row) => row.deductions || 0 },
     {
-      name: "Tổng nhận (VNĐ)",
-      selector: (row) => row.totalPay,
+      name: "Thưởng",
+      selector: (row) => row.bonuses.toLocaleString() || 0,
+    },
+    {
+      name: "Khấu trừ",
+      selector: (row) => row.deductions.toLocaleString() || 0,
+    },
+    {
+      name: "Tổng nhận",
+      selector: (row) => row.totalPay.toLocaleString(),
       sortable: true,
     },
     { name: "Ghi chú", selector: (row) => row.remarks || "—" },

@@ -153,7 +153,7 @@ export const getAllEmployees = async (req, res) => {
   try {
     const employees = await Employee.find()
       .populate("user", "name email")
-      .populate("department", "name");
+      .populate("department", "name").populate("salary", "totalPay");
     res.status(200).json({ success: true, employees });
   } catch (err) {
     console.error("Get employees error:", err);

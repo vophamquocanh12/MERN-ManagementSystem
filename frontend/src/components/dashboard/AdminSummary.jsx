@@ -57,7 +57,7 @@ const AdminSummary = () => {
     },
     {
       icon: <FaMoneyCheckAlt />,
-      label: "Tổng tiên lương",
+      label: "Tổng tiền lương",
       count: `${stats.totalSalay?.toLocaleString() ?? 0} VNĐ`,
       color: "bg-purple-500",
     },
@@ -70,7 +70,7 @@ const AdminSummary = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 m-0">
       <h2 className="text-2xl font-bold mb-4">📊 Dashboard Overview</h2>
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
