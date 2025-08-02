@@ -88,37 +88,61 @@ export const updateEmployeeProfile = async (req, res) => {
 // ✅ 3. Admin Updates Any Employee’s Profile
 export const updateAnyEmployeeProfile = async (req, res) => {
   try {
-    const employeeId = req.params.id;
-    const { name, email, bio, skills, department } = req.body;
+    // const employeeId = req.params.id;
+    // const { name, email, department } = req.body;
 
-    // Update Employee
-    const employee = await Employee.findByIdAndUpdate(employeeId);
+    // // Update Employee
+    // const employee = await Employee.findByIdAndUpdate(employeeId);
+    // if (!employee) {
+    //   return res
+    //     .status(404)
+    //     .json({ success: false, error: "Employee not found" });
+    // }
+
+    // if (department) {
+    //   employee.department = department;
+    // }
+    
+    // await employee.save();
+
+    // const user = await User.findById(employee.user);
+    // if (name) {
+    //   user.name = name;
+    // }
+    // if (email) {
+    //   user.email = email;
+    // }
+    // await user.save();
+    // res.status(200).json({ success: true, employee });
+    
+    const { id } = req.params; // ID của employee
+    const employee = await Employee.findById(id);
     if (!employee) {
       return res
         .status(404)
-        .json({ success: false, error: "Employee not found" });
+        .json({ success: false, message: "Không tìm thấy nhân viên" });
     }
-
-    if (department) {
-      employee.department = department;
-    }
-    if (bio) {
-      employee.bio = bio;
-    }
-    if (skills) {
-      employee.skills = skills;
-    }
-    await employee.save();
 
     const user = await User.findById(employee.user);
-    if (name) {
-      user.name = name;
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy user của nhân viên" });
     }
-    if (email) {
-      user.email = email;
-    }
+
+    // Cập nhật user
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
     await user.save();
-    res.status(200).json({ success: true, employee });
+
+    // Cập nhật employee
+    employee.department = req.body.department || employee.department;
+
+    await employee.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Đã cập nhật thông tin nhân viên" });
   } catch (error) {
     console.error("Admin profile update error:", error);
     res.status(500).json({ success: false, error: "Failed to update profile" });
@@ -139,21 +163,17 @@ export const getAllEmployees = async (req, res) => {
 // ✅ 5. Admin Delete Employee
 export const deleteEmployee = async (req, res) => {
   try {
-    const employeeId = req.params.id;
+   const { id } = req.params;
 
-    // Kiểm tra xem user tồn tại và có phải employee không
-    const employee = await User.findById(employeeId);
-    if (!employee || employee.role !== "employee") {
-      return res
-        .status(404)
-        .json({ success: false, message: "Employee not found." });
-    }
+   // Nếu bạn dùng liên kết với User
+   const employee = await Employee.findByIdAndDelete(id);
+   if (!employee)
+     return res.status(404).json({ message: "Không tìm thấy nhân viên" });
 
-    await User.findByIdAndDelete(employeeId);
+   // Có thể xoá luôn User nếu cần
+   await User.findByIdAndDelete(employee.user);
 
-    res
-      .status(200)
-      .json({ success: true, message: "Employee deleted successfully." });
+   res.status(200).json({ message: "Xóa thành công" });
   } catch (err) {
     console.error("Delete employee error:", err);
     res.status(500).json({ success: false, error: err.message });

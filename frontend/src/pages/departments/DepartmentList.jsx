@@ -5,7 +5,7 @@ import DataTable from "react-data-table-component";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
-import { exportToPDF, exportToExcel } from "../../utils/exportUtils";
+
 
 const DepartmentList = () => {
   const [departments, setDepartments] = useState([]);
@@ -17,7 +17,7 @@ const DepartmentList = () => {
   useEffect(() => {
     const socket = io(import.meta.env.VITE_API_URL);
     socket.on("new-department", (dept) => {
-      toast.info(`📢 New department added: ${dept.name}`);
+      toast.info(`📢 Đã thêm phòng ban: ${dept.name}`);
       fetchDepartments();
     });
     return () => socket.disconnect();
@@ -28,8 +28,8 @@ const DepartmentList = () => {
       const res = await api.get("/departments");
       setDepartments(res.data.departments);
       setFiltered(res.data.departments);
-    } catch (err) {
-      console.error("Failed to fetch departments:", err);
+    } catch (error) {
+      console.error("Failed to fetch departments:", error);
     }
   };
 
@@ -58,29 +58,30 @@ const DepartmentList = () => {
     try {
       if (editData) {
         await api.put(`/departments/${editData._id}`, formData);
-        toast.success("✅ Department updated");
+        toast.success("✅ Cập nhật phòng ban thành công");
       } else {
         await api.post("/departments", formData);
-        toast.success("✅ Department added");
+        toast.success("✅ Thêm phòng ban mới thành công");
       }
 
       setModalOpen(false);
       fetchDepartments();
     } catch {
-      toast.error("❌ Error saving department");
+      toast.error("❌ Lỗi khi lưu phòng ban");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this department?")) return;
+    if (!window.confirm("Bạn có chắc chắn muốn xóa phòng ban này không?"))
+      return;
 
     try {
       await api.delete(`/departments/${id}`);
       setDepartments((prev) => prev.filter((dept) => dept._id !== id));
-      toast.success("🗑️ Department deleted");
-    } catch (err) {
-      console.error("Delete failed:", err);
-      toast.error("❌ Error deleting department");
+      toast.success("🗑️ Phòng ban đã được xóa");
+    } catch (error) {
+      console.error("Xóa thất bại:", error);
+      toast.error("❌ Lỗi khi xóa phòng ban");
     }
   };
 
@@ -161,7 +162,7 @@ const DepartmentList = () => {
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">{editData ? "Edit" : "Add"} Department</h3>
+            <h3 className="text-lg font-bold mb-4">{editData ? "Chỉnh sửa" : "Thêm"} phòng ban</h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -191,10 +192,10 @@ const DepartmentList = () => {
                   onClick={() => setModalOpen(false)}
                   className="px-4 py-2 bg-gray-300 rounded"
                 >
-                  Cancel
+                  Bỏ qua
                 </button>
                 <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
-                  {editData ? "Cập nhật" : "Tạo mới"}
+                  {editData ? "Cập nhật" : "Thêm mới"}
                 </button>
               </div>
             </form>
