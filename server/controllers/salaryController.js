@@ -9,33 +9,129 @@ import User from "../models/User.js";
  * Admin creates a new salary record
  */
 export const createSalaryRecord = async (req, res) => {
-  try {
-    const { employee, month, basePay, bonus, deductions, remarks } = req.body;
+   try {
+     const { employee, month, basePay, bonuses, deductions, remarks } =
+       req.body;
 
-    const existingSalary = await Salary.findOne({ employee, month });
-    if (existingSalary) {
-      return res.status(400).json({
-        success: false,
-        message: `Salary for employee in month ${month} already exists.`,
-      });
+     if (!employee || !month || basePay === undefined) {
+       return res
+         .status(400)
+         .json({ success: false, message: "Thiếu thông tin bắt buộc." });
+     }
+
+     const base = Number(basePay);
+     const bon = Number(bonuses || 0);
+     const ded = Number(deductions || 0);
+     const totalPay = base + bon - ded;
+
+     const existingSalary = await Salary.findOne({ employee, month });
+     if (existingSalary) {
+       return res.status(400).json({
+         success: false,
+         message: `Lương tháng ${month} của nhân viên đã tồn tại.`,
+       });
+     }
+
+     const salary = await Salary.create({
+       employee,
+       month,
+       basePay: base,
+       bonuses: bon,
+       deductions: ded,
+       totalPay,
+       remarks,
+     });
+
+     await Employee.findByIdAndUpdate(employee, {
+       $push: { salary: salary._id },
+     });
+
+     res.status(201).json({ success: true, salary });
+   } catch (err) {
+     console.error("Error creating salary:", err);
+     res.status(500).json({ success: false, message: err.message });
+   }
+};
+
+/*
+  DELETE /api/salaries/:id
+  Admin deletes a salary record
+*/
+export const deleteSalaryRecord = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const salary = await Salary.findById(id);
+    if (!salary) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy bản ghi lương." });
     }
 
-    const totalPay = basePay + (bonus || 0) - (deductions || 0);
+    // Xóa ID lương khỏi nhân viên liên quan
+    await Employee.findByIdAndUpdate(salary.employee, {
+      $pull: { salary: salary._id },
+    });
 
-    const salary = await Salary.create({
-      employee,
-      month,
-      basePay,
-      bonus,
-      deductions,
-      totalPay,
-      remarks,
+    // Xóa bản ghi lương
+    await Salary.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "🗑️ Đã xóa bản ghi lương thành công.",
     });
-    await Employee.findByIdAndUpdate(employee, {
-      $push: { salary: salary._id },
-    });
-    res.status(201).json({ success: true, salary });
   } catch (err) {
+    console.error("Error deleting salary:", err);
+    res.status(500).json({
+      success: false,
+      message: "Đã xảy ra lỗi khi xóa bản ghi lương.",
+    });
+  }
+};
+
+
+/*
+  PUT /api/salaries/:id
+  Admin updates an existing salary record
+*/
+export const updateSalaryRecord = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { employee, month, basePay, bonuses, deductions, remarks } = req.body;
+
+    if (!employee || !month || basePay === undefined) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Thiếu thông tin bắt buộc." });
+    }
+
+    const base = Number(basePay);
+    const bon = Number(bonuses || 0);
+    const ded = Number(deductions || 0);
+    const totalPay = base + bon - ded;
+
+    const salary = await Salary.findById(id);
+    if (!salary) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy bản ghi lương." });
+    }
+
+    // Cập nhật các trường
+    salary.month = month;
+    salary.basePay = base;
+    salary.bonuses = bon;
+    salary.deductions = ded;
+    salary.totalPay = totalPay;
+    salary.remarks = remarks;
+
+    await salary.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Cập nhật lương thành công", salary });
+  } catch (err) {
+    console.error("Error updating salary:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 };
@@ -46,14 +142,22 @@ export const createSalaryRecord = async (req, res) => {
  */
 export const getAllSalaries = async (req, res) => {
   try {
-    const salaries = await Salary.find().populate({
-      path: "employee",
-      populate: {
-        path: "user", // ↩ populate tới User
-        select: "name", // ↩ lấy trường name
+const salaries = await Salary.find()
+  .populate({
+    path: "employee",
+    select: "department user", // chỉ cần select các trường cần dùng
+    populate: [
+      {
+        path: "user",
+        select: "name", // lấy tên user
       },
-      select: "department designation", // các field bạn muốn lấy từ Employee
-    }).sort({ paidDate: -1 });
+      {
+        path: "department",
+        select: "name", // lấy tên phòng ban
+      },
+    ],
+  })
+  .sort({ paidDate: -1 });
 
     res.status(200).json({ success: true, salaries });
   } catch (err) {

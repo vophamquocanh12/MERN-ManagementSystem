@@ -44,11 +44,11 @@ const SalarySlip = ({ salary }) => {
         <h2 className="text-xl font-bold mb-2">Salary Slip</h2>
         <p><strong>Employee:</strong> {salary.employee.name}</p>
         <p><strong>Month:</strong> {salary.month}</p>
-        <p><strong>Base Pay:</strong> £{salary.basePay}</p>
-        <p><strong>Bonuses:</strong> £{salary.bonuses}</p>
-        <p><strong>Deductions:</strong> £{salary.deductions}</p>
+        <p><strong>Base Pay:</strong> {salary.basePay}VNĐ</p>
+        <p><strong>Bonuses:</strong> {salary.bonuses}VNĐ</p>
+        <p><strong>Deductions:</strong> {salary.deductions}VNĐ</p>
         <hr className="my-2" />
-        <p className="font-semibold"><strong>Total Pay:</strong> £{salary.totalPay}</p>
+        <p className="font-semibold"><strong>Total Pay:</strong> {salary.totalPay}VNĐ</p>
       </div>
 
       <div className="mt-4 flex gap-3">

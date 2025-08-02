@@ -16,10 +16,10 @@ export const generateSalarySlip = (employee) => {
     startY: 55,
     head: [["Earnings", "Amount"]],
     body: [
-      ["Basic", `£${employee.salary.basic}`],
-      ["Bonus", `£${employee.salary.bonus}`],
-      ["Deductions", `£${employee.salary.deductions}`],
-      ["Net Pay", `£${employee.salary.net}`],
+      ["Basic", `${employee.salary.basic}VNĐ`],
+      ["Bonus", `${employee.salary.bonus}VNĐ`],
+      ["Deductions", `${employee.salary.deductions}VNĐ`],
+      ["Net Pay", `${employee.salary.net}VNĐ`],
     ],
   });
 

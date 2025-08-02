@@ -9,7 +9,9 @@ import {
   getMonthlyPayrollSummary,
   getPayrollByDepartment,
   getMonthlySalaryStats,
+  updateSalaryRecord,
   getSalaryStats,
+  deleteSalaryRecord,
 
 } from "../controllers/salaryController.js";
 
@@ -17,6 +19,12 @@ const router = express.Router();
 
 // POST /api/salaries - Admin creates salary record
 router.post("/", verifyToken, verifyRole("admin"), createSalaryRecord);
+
+// PUT /api/salaries/:id - Admin updates salary record
+router.put("/:id", verifyToken, verifyRole("admin"), updateSalaryRecord);
+
+// DELETE /api/salaries/:id - Admin deletes salary record
+router.delete("/:id", verifyToken, verifyRole("admin"), deleteSalaryRecord);
 
 // GET /api/salaries - Admin views all
 router.get("/", verifyToken, verifyRole("admin"), getAllSalaries);

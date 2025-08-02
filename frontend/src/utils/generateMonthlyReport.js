@@ -10,7 +10,7 @@ export const generateMonthlyReport = (data, month) => {
       emp.name,
       emp.department,
       emp.leaveCount,
-      `£${emp.salary}`,
+      `${emp.salary}VNĐ`,
     ]),
   });
   doc.save(`Monthly_Report_${month}.pdf`);

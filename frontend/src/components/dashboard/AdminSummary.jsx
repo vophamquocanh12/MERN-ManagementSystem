@@ -58,7 +58,7 @@ const AdminSummary = () => {
     {
       icon: <FaMoneyCheckAlt />,
       label: "Tổng tiên lương",
-      count: `£${stats.totalSalay?.toLocaleString() ?? 0}`,
+      count: `${stats.totalSalay?.toLocaleString() ?? 0} VNĐ`,
       color: "bg-purple-500",
     },
     {

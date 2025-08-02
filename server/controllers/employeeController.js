@@ -163,17 +163,21 @@ export const getAllEmployees = async (req, res) => {
 // ✅ 5. Admin Delete Employee
 export const deleteEmployee = async (req, res) => {
   try {
-   const { id } = req.params;
+    const { id } = req.params;
 
-   // Nếu bạn dùng liên kết với User
-   const employee = await Employee.findByIdAndDelete(id);
-   if (!employee)
-     return res.status(404).json({ message: "Không tìm thấy nhân viên" });
+    // Nếu bạn dùng liên kết với User
+    const employee = await Employee.findByIdAndDelete(id);
+    if (!employee)
+      return res.status(404).json({ message: "Không tìm thấy nhân viên" });
 
-   // Có thể xoá luôn User nếu cần
-   await User.findByIdAndDelete(employee.user);
+    //Xoá các salary liên kết
+    if (employee.salary && employee.salary.length > 0) {
+      await Salary.deleteMany({ _id: { $in: employee.salary } });
+    }
+    // Có thể xoá luôn User nếu cần
+    await User.findByIdAndDelete(employee.user);
 
-   res.status(200).json({ message: "Xóa thành công" });
+    res.status(200).json({ message: "Xóa thành công" });
   } catch (err) {
     console.error("Delete employee error:", err);
     res.status(500).json({ success: false, error: err.message });
