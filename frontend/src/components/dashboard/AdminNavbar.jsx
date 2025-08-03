@@ -11,7 +11,7 @@ const AdminNavbar = () => {
         className="bg-white text-teal-700 px-4 py-1 rounded hover:bg-teal-100"
         onClick={logout}
       >
-        Logout
+        Đăng xuất
       </button>
     </div>
   );

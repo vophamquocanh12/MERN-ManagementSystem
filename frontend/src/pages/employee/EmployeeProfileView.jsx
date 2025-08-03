@@ -27,7 +27,7 @@ const EmployeeProfileView = () => {
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-6 shadow rounded mt-10">
-      <h2 className="text-2xl font-bold mb-4">My Profile</h2>
+      <h2 className="text-2xl font-bold mb-4">Hồ sơ của tôi</h2>
 
       {profile.employee?.photoUrl && (
         <img

@@ -44,10 +44,12 @@ const EmployeeSummary = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <h2 className="text-xl font-semibold mb-4">Welcome to Your Dashboard</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        Chào mừng bạn đến với Trang tổng quan của bạn
+      </h2>
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="bg-blue-500 text-white p-4 rounded shadow">
+        {/* <div className="bg-blue-500 text-white p-4 rounded shadow">
           <div className="flex items-center gap-3">
             <FaCalendarCheck size={24} />
             <div>
@@ -55,19 +57,19 @@ const EmployeeSummary = () => {
               <h3 className="text-lg font-bold">{data.leavesTaken}</h3>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-green-600 text-white p-4 rounded shadow">
           <div className="flex items-center gap-3">
             <FaMoneyBill size={24} />
             <div>
-              <p className="text-sm">Salary (Monthly)</p>
-              <h3 className="text-lg font-bold">£{data.salary}</h3>
+              <p className="text-sm">Lương</p>
+              <h3 className="text-lg font-bold">{data.salary} VNĐ</h3>
             </div>
           </div>
         </div>
 
-        <div className="bg-purple-600 text-white p-4 rounded shadow">
+        {/* <div className="bg-purple-600 text-white p-4 rounded shadow">
           <div className="flex items-center gap-3">
             <FaUserCheck size={24} />
             <div>
@@ -77,7 +79,7 @@ const EmployeeSummary = () => {
               </h3>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

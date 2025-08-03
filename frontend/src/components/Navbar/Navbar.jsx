@@ -9,7 +9,7 @@ const Navbar = () => {
       <ul className="flex items-center space-x-4 text-gray-700">
         <li><Link to="/admin-dashboard/employees">Employees</Link></li>
         <li><Link to="/admin-dashboard/departments">Departments</Link></li>
-        <li><Link to="/logout">Logout</Link></li>
+        <li><Link to="/logout">Đăng xuất</Link></li>
       </ul>
     </nav>
   );

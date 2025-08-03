@@ -56,7 +56,9 @@ const Login = () => {
 
   return (
     <div className="flex flex-col items-center h-screen justify-center bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6">
-      <h2 className="font-pacific text-3xl text-white">Employee Management System</h2>
+      <h2 className="font-pacific text-3xl text-white">
+        Hệ Thống Quản Lý Nhân Viên
+      </h2>
 
       <div className="border shadow p-6 w-80 bg-white rounded">
         <h2 className="text-2xl font-bold mb-4">Login</h2>
@@ -65,32 +67,36 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-gray-700 mb-1">Role</label>
+            <label className="block text-gray-700 mb-1">Vai trò</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-teal-500"
             >
-              <option value="employee">Employee</option>
-              <option value="admin">Admin</option>
+              <option value="employee">Nhân viên</option>
+              <option value="admin">Quản lý</option>
             </select>
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-gray-700 mb-1">Email</label>
+            <label htmlFor="email" className="block text-gray-700 mb-1">
+              Tài khoản
+            </label>
             <input
               type="email"
               id="email"
+              placeholder="Nhập email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-3 py-2 border rounded focus:ring-2 focus:ring-teal-500"
-              placeholder="Enter your email"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-gray-700 mb-1">Password</label>
+            <label htmlFor="password" className="block text-gray-700 mb-1">
+              Mật khẩu
+            </label>
             <input
               type="password"
               id="password"
@@ -102,20 +108,12 @@ const Login = () => {
             />
           </div>
 
-          <div className="flex items-center justify-between text-sm text-gray-600">
-            <label className="inline-flex items-center">
-              <input type="checkbox" className="form-checkbox" />
-              <span className="ml-2">Remember me</span>
-            </label>
-            <a href="#" className="text-teal-600 hover:underline">Forgot password?</a>
-          </div>
-
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded transition duration-200"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>

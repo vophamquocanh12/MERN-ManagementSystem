@@ -127,7 +127,7 @@ const Register = () => {
         <p className="text-sm text-center mt-4">
           Already registered?{' '}
           <a href="/login" className="text-teal-600 font-semibold">
-            Login
+            Đăng nhập
           </a>
         </p>
       </div>

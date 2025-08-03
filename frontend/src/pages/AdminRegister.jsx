@@ -112,7 +112,7 @@ const AdminRegister = () => {
         <p className="text-sm text-center mt-4">
           Already an admin?{' '}
           <a href="/login" className="text-purple-700 font-semibold">
-            Login
+            Đăng nhập
           </a>
         </p>
       </div>

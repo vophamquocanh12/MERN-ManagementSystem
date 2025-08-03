@@ -1,11 +1,23 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { FaUserAlt, FaCalendarCheck, FaCalendarAlt, FaMoneyBill, FaCogs, FaEye } from "react-icons/fa";
+import {
+  FaUserAlt,
+  FaCalendarCheck,
+  FaCalendarAlt,
+  FaMoneyBill,
+  FaCogs,
+  FaEye,
+} from "react-icons/fa";
 
 const EmployeeSidebar = () => {
   const navItems = [
+    { label: "Tổng quan", icon: <FaCalendarAlt />, to: "/employee-dashboard" },
     { label: "Hồ sơ", icon: <FaUserAlt />, to: "/employee-dashboard/profile" },
-    { label: "Xem hồ sơ", icon: <FaEye />, to: "/employee-dashboard/profile/view" },
+    {
+      label: "Xem hồ sơ",
+      icon: <FaEye />,
+      to: "/employee-dashboard/profile/view",
+    },
     //{ label: "Leave", icon: <FaCalendarCheck />, to: "/employee-dashboard/leave" },
     { label: "Lương", icon: <FaMoneyBill />, to: "/employee-dashboard/salary" },
     //{ label: "Attendance Heatmap", icon: <FaCalendarAlt />, to: "/employee-dashboard/attendance-heatmap" },
@@ -14,7 +26,7 @@ const EmployeeSidebar = () => {
 
   return (
     <div className="fixed top-0 left-0 h-screen w-64 bg-gray-800 text-white py-6 space-y-6">
-      <h2 className="text-center text-xl font-bold">Employee Panel</h2>
+      <h2 className="text-center text-xl font-bold">Nhân viên</h2>
       <nav className="flex flex-col gap-2">
         {navItems.map((item) => (
           <NavLink

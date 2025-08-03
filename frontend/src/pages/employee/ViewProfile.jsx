@@ -34,21 +34,16 @@ const ViewProfile = () => {
     fetchProfile();
   }, []);
 
-  if (loading) return <div className="p-6">🔄 Loading profile...</div>;
+  if (loading) return <div className="p-6">🔄 Đang tải hồ sơ...</div>;
   if (error) return <div className="p-6 text-red-500">{error}</div>;
 
   const { user, employee } = profile;
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">👤 My Profile</h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">👤 Hồ sơ của tôi</h2>
 
       <div className="flex items-center gap-5 mb-5">
-        <img
-          src={employee?.photoUrl || "/default-avatar.png"}
-          alt="Profile"
-          className="w-24 h-24 rounded-full object-cover border"
-        />
         <div>
           <h3 className="text-xl font-semibold">{user?.name || "Unnamed"}</h3>
           <p className="text-gray-600">{user?.email}</p>
@@ -56,14 +51,14 @@ const ViewProfile = () => {
       </div>
 
       <div className="mb-4">
-        <strong className="text-gray-700">Department:</strong>{" "}
-        <span className="text-gray-800">{user?.department?.name || "Not assigned"}</span>
+        <strong className="text-gray-700">Phòng ban:</strong>{" "}
+        <span className="text-gray-800">{employee?.department?.name || "Chưa được giao"}</span>
       </div>
 
       <div className="mb-4">
-        <strong className="text-gray-700">Short Bio:</strong>
+        <strong className="text-gray-700">Tiểu sử ngắn:</strong>
         <p className="mt-1 text-gray-700 whitespace-pre-line">
-          {employee?.bio || "No bio added yet."}
+          {employee?.bio || "Chưa có tiểu sử."}
         </p>
       </div>
 
@@ -85,7 +80,7 @@ const ViewProfile = () => {
         className="mt-6 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded shadow"
         onClick={() => (window.location.href = "/employee-dashboard/profile")}
       >
-        ✏️ Edit Profile
+        ✏️ Chỉnh sửa hồ sơ
       </button>
     </div>
   );
