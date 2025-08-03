@@ -1,45 +1,23 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { FaCalendarCheck, FaMoneyBill, FaUserCheck } from "react-icons/fa";
 import api from "@/services/api";
 import { toast } from "react-toastify";
 
 const EmployeeSummary = () => {
-  const [data, setData] = useState({
-    leavesTaken: 0,
-    salary: 0,
-    attendance: { present: 0, absent: 0 },
-  });
 
+  const [salary, setSalary] = useState([])
+  
+  const fetchSalary = async () => {
+    try {
+      const res = await api.get('/salaries/my')
+      setSalary(res.data.salaries)
+    } catch (error) {
+      toast.error("Failed to load salary data");
+    }
+  }
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        console.log("TOKEN IN DASHBOARD:", token);
-
-        const [salaryRes, leaveRes, attendanceRes] = await Promise.all([
-          api.get("/salaries/my", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          api.get("/leaves/my-summary", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          api.get("/attendance/my", {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-        ]);
-
-        setData({
-            salary: salaryRes.data?.salary?.amount ?? 0,
-            leavesTaken: leaveRes.data?.taken ?? 0,
-            attendance: attendanceRes.data?.summary ?? { present: 0, absent: 0 },
-          });
-      } catch (err) {
-        console.error("Dashboard fetch error:", err.response?.data || err.message); // ✅ Step 2
-        toast.error("Failed to load dashboard data");
-      }
-    };
-
-    fetchData();
+    fetchSalary();
   }, []);
 
   return (
@@ -64,7 +42,11 @@ const EmployeeSummary = () => {
             <FaMoneyBill size={24} />
             <div>
               <p className="text-sm">Lương</p>
-              <h3 className="text-lg font-bold">{data.salary} VNĐ</h3>
+              <h3 className="text-lg font-bold">
+                {salary.length > 0
+                  ? `${salary[0].totalPay.toLocaleString()} VNĐ`
+                  : "0 VNĐ"}
+              </h3>
             </div>
           </div>
         </div>
