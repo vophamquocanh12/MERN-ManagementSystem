@@ -35,7 +35,7 @@ const addDepartment = async (req, res) => {
     const { name, description } = req.body;
     const existing = await Department.findOne({ name });
     if (existing) {
-      return res.status(400).json({ success: false, error: "Department already exists" });
+      return res.status(400).json({ success: false, error: "Phòng ban đã tồn tại" });
     }
 
     const newDep = await Department.create({ name, description });

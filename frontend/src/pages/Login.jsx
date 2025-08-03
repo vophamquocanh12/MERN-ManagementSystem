@@ -33,7 +33,7 @@ const Login = () => {
         // Optional: verify selected role matches actual user role
         if (user.role !== role) {
           toast.error(
-            `Vai trò không khớp: Bạn đã cố gắng đăng nhập với tư cách là ${role}, nhưng vai trò của bạn là ${user.role}`
+            `Vai trò không khớp: Bạn đã cố gắng đăng nhập với tư cách là ${role==="admin"?"quản lý":"nhân viên"}, nhưng vai trò của bạn là ${user.role==="admim"?"nhân viên":"quản lý"}`
           );
           return;
         }
@@ -66,7 +66,7 @@ const Login = () => {
       </h2>
 
       <div className="border shadow p-6 w-80 bg-white rounded">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
+        <h2 className="text-2xl font-bold mb-4">Đăng nhập</h2>
 
         {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
@@ -118,7 +118,7 @@ const Login = () => {
             disabled={loading}
             className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 rounded transition duration-200"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>
         </form>
       </div>

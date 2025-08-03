@@ -1,14 +1,15 @@
+/* eslint-disable no-unused-vars */
 // frontend/src/components/dashboard/DashboardCharts.jsx
 import React, { useEffect, useState } from "react";
 import api from "@/services/api";
 
 // Recharts components
-import AttendanceChart from "../charts/AttendanceChart";
-import SalaryChart from "../charts/SalaryChart";
-import LeaveTrendChart from "../charts/LeaveTrendChart";
-import AttendancePieChart from "../charts/AttendancePieChart";
-import LeaveChart from "../dashboard/LeaveChart";
-import PayrollBarChart from "../charts/PayrollBarChart";
+//  import AttendanceChart from "../charts/AttendanceChart";
+  import SalaryChart from "../charts/SalaryChart";
+  import LeaveTrendChart from "../charts/LeaveTrendChart";
+  import AttendancePieChart from "../charts/AttendancePieChart";
+  import LeaveChart from "../dashboard/LeaveChart";
+  import PayrollBarChart from "../charts/PayrollBarChart";
 
 // Chart.js combo (bar + doughnut)
 import AdminStatsChart from "../dashboard/AdminStatsChart";
@@ -68,12 +69,12 @@ const DashboardCharts = () => {
   return (
     <div className="space-y-8">
       {/* 🔼 Grid of 4 charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <AttendanceChart data={attendanceData} />
         <SalaryChart data={salaryData} />
         <LeaveTrendChart data={leaveTrendData} />
         <AttendancePieChart data={attendanceSummaryData} />
-      </div>
+      </div> */}
 
       {/* 🔽 Full-width stacked charts */}
       <div className="mt-6 grid grid-cols-1 gap-6">

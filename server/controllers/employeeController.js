@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import fs from "fs";
+import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Employee from "../models/Employee.js";
 import cloudinary from "../config/cloudinary.js";
@@ -7,7 +7,6 @@ import sendEmail from "../utils/sendEmail.js";
 import Notification from "../models/notificationModel.js";
 import { uploadToCloudinary } from "../utils/uploadToCloudinary.js";
 import path from "path";
-import { log } from "console";
 
 // ✅ 1. Create New Employee (Admin Only)
 export const createEmployee = async (req, res) => {
@@ -23,7 +22,7 @@ export const createEmployee = async (req, res) => {
     if (existing) {
       return res
         .status(400)
-        .json({ success: false, message: "Email already in use." });
+        .json({ success: false, message: "Email đã tồn tại." });
     }
 
     const hashed = await bcrypt.hash(password, 10);
@@ -72,14 +71,15 @@ export const updateEmployeeProfile = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    // ✅ Send Notification
-    await Notification.create({
-      message: `${user.name} updated their profile`,
-      type: "info",
-      targetRole: "admin",
-    });
+    const token = jwt.sign(
+      { _id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
 
-    res.status(200).json({ success: true, user, employee });
+    res.status(200).json({ success: true, user, employee, token });
   } catch (error) {
     console.error("Profile update error:", error);
     res.status(500).json({ success: false, error: "Failed to update profile" });
@@ -127,7 +127,8 @@ export const getAllEmployees = async (req, res) => {
   try {
     const employees = await Employee.find()
       .populate("user", "name email")
-      .populate("department", "name").populate("salary", "totalPay");
+      .populate("department", "name")
+      .populate("salary", "totalPay");
     res.status(200).json({ success: true, employees });
   } catch (err) {
     console.error("Get employees error:", err);

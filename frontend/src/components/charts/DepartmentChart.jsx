@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -24,7 +25,7 @@ const DepartmentChart = ({ data }) => {
     },
   };
 
-  return <Bar data={chartData} options={options} />;
+  return <></>;
 };
 
 export default DepartmentChart;

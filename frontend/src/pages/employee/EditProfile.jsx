@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "../../contexts/useAuth";
-import { getOwnEmployeeProfile, updateEmployeeProfile } from "../../services/employeeService";
+import {
+  getOwnEmployeeProfile,
+  updateEmployeeProfile,
+} from "../../services/employeeService";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { user, login } = useAuth();
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email || "");
   const [bio, setBio] = useState(user.bio || "");
-    const [skillsText, setSkillsText] = useState(
-      (user.skills || []).join(", ")
-    );
+  const [skillsText, setSkillsText] = useState((user.skills || []).join(", "));
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -42,16 +45,53 @@ const Profile = () => {
 
     try {
       setLoading(true);
-      const updated = await updateEmployeeProfile(payload); // gửi JSON
-      login(updated.user);
-      toast.info("✅ Hồ sơ đã được cập nhật thành công!");
+
+      const updated = await updateEmployeeProfile(payload);
+
+      if (updated?.token && updated?.user) {
+        login(updated.user, updated.token); // cập nhật context + lưu token
+
+        toast.success("✅ Hồ sơ đã được cập nhật!");
+
+        // ⚠️ Trì hoãn chuyển trang để AuthProvider reload token
+        setTimeout(() => {
+         navigate("/employee-dashboard/profile/view"); // hoặc dùng navigate
+        }, 500);
+      } else {
+        toast.error("⚠️ Thiếu token hoặc thông tin người dùng!");
+      }
     } catch (error) {
-      console.error(error);
+      console.error("❌ Lỗi khi cập nhật:", error);
       toast.error("❌ Không cập nhật được hồ sơ.");
     } finally {
       setLoading(false);
     }
   };
+
+  // const handleUpdate = async () => {
+  //   const payload = {
+  //     name,
+  //     email,
+  //     bio,
+  //     skills: skillsText
+  //       .split(",")
+  //       .map((s) => s.trim())
+  //       .filter(Boolean),
+  //   };
+
+  //   try {
+  //     setLoading(true);
+  //     const updated = await updateEmployeeProfile(payload); // gửi JSON
+  //     login(updated.user);
+  //     toast.info("✅ Hồ sơ đã được cập nhật thành công!");
+  //      navigate("/employee-dashboard/profile/view");
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error("❌ Không cập nhật được hồ sơ.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-blue-50 to-teal-100 flex items-center justify-center px-4 py-8">

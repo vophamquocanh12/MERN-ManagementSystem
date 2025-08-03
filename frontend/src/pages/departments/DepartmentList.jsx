@@ -6,7 +6,6 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 
-
 const DepartmentList = () => {
   const [departments, setDepartments] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -29,7 +28,9 @@ const DepartmentList = () => {
       setDepartments(res.data.departments);
       setFiltered(res.data.departments);
     } catch (error) {
-      console.error("Failed to fetch departments:", error);
+      if (error.response && error.response.status === 400)
+        toast.error(`⚠️ ${error.response.data.message}`);
+      else toast.error("❌ Lỗi khi lưu phòng ban");
     }
   };
 
@@ -85,25 +86,38 @@ const DepartmentList = () => {
     }
   };
 
-  const customStyles = {
-    rows: {
-      style: {
-        fontSize: "30px"
-      },
+const customStyles = {
+  table: {
+    style: {
+      borderRadius: "0.5rem",
+      overflow: "hidden",
     },
-    headCells: {
-      style: {
-        fontSize: "30px",
-        fontWeight: "bold"
-      },
+  },
+  rows: {
+    style: {
+      fontSize: "24px",
+      paddingTop: "12px",
+      paddingBottom: "12px",
     },
-    cells: {
-      style: {
-        paddingLeft: "8px",
-        paddingRight: "8px"
-      },
+  },
+  headCells: {
+    style: {
+      fontSize: "20px",
+      fontWeight: "700",
+      backgroundColor: "#f9fafb",
+      color: "#111827",
+      paddingTop: "14px",
+      paddingBottom: "14px",
     },
-  };
+  },
+  cells: {
+    style: {
+      paddingLeft: "12px",
+      paddingRight: "12px",
+    },
+  },
+};
+
 
   const columns = [
     { name: "#", selector: (row, i) => i + 1, width: "60px" },
@@ -113,10 +127,16 @@ const DepartmentList = () => {
       name: "Hành động",
       cell: (row) => (
         <div className="flex gap-2">
-          <button onClick={() => handleEdit(row)} className="text-blue-600 hover:underline text-3xl">
+          <button
+            onClick={() => handleEdit(row)}
+            className="text-blue-600 hover:underline text-3xl"
+          >
             <FaEdit />
           </button>
-          <button onClick={() => handleDelete(row._id)} className="text-red-600 hover:underline text-3xl">
+          <button
+            onClick={() => handleDelete(row._id)}
+            className="text-red-600 hover:underline text-3xl"
+          >
             <FaTrash />
           </button>
         </div>
@@ -143,7 +163,10 @@ const DepartmentList = () => {
           <button onClick={() => exportToPDF(filtered, "Departments Report")} className="bg-red-600 text-white px-3 py-1 rounded">
             Export to PDF
           </button> */}
-          <button onClick={handleAdd} className="bg-blue-600 text-white px-4 py-1 rounded">
+          <button
+            onClick={handleAdd}
+            className="bg-blue-600 text-white px-4 py-1 rounded"
+          >
             + Thêm phòng ban
           </button>
         </div>
@@ -162,7 +185,9 @@ const DepartmentList = () => {
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-            <h3 className="text-lg font-bold mb-4">{editData ? "Chỉnh sửa" : "Thêm"} phòng ban</h3>
+            <h3 className="text-lg font-bold mb-4">
+              {editData ? "Chỉnh sửa" : "Thêm"} phòng ban
+            </h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -194,7 +219,10 @@ const DepartmentList = () => {
                 >
                   Bỏ qua
                 </button>
-                <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-green-600 text-white rounded"
+                >
                   {editData ? "Cập nhật" : "Thêm mới"}
                 </button>
               </div>

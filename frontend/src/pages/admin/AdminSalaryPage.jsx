@@ -73,7 +73,13 @@ const AdminSalaryPage = () => {
       setModalOpen(false);
       fetchSalaries();
     } catch (error) {
-      toast.error("❌ Lỗi khi lưu lương");
+       if (error.response && error.response.status === 400) {
+         // lỗi như: lương tháng đã tồn tại
+         toast.error(`⚠️ ${error.response.data.message}`);
+       } else {
+         toast.error("❌ Lỗi khi lưu lương");
+         console.error("Lỗi khi lưu lương:", error);
+       }
     }
   };
 
@@ -98,21 +104,33 @@ const AdminSalaryPage = () => {
   };
 
   const customStyles = {
+    table: {
+      style: {
+        borderRadius: "0.5rem",
+        overflow: "hidden",
+      },
+    },
     rows: {
       style: {
         fontSize: "20px",
+        paddingTop: "12px",
+        paddingBottom: "12px",
       },
     },
     headCells: {
       style: {
         fontSize: "20px",
-        fontWeight: "bold",
+        fontWeight: "700",
+        backgroundColor: "#f9fafb",
+        color: "#111827",
+        paddingTop: "14px",
+        paddingBottom: "14px",
       },
     },
     cells: {
       style: {
-        paddingLeft: "5px",
-        paddingRight: "5px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
       },
     },
   };

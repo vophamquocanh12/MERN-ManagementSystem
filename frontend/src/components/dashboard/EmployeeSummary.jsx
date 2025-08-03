@@ -44,7 +44,9 @@ const EmployeeSummary = () => {
               <p className="text-sm">Lương</p>
               <h3 className="text-lg font-bold">
                 {salary.length > 0
-                  ? `${salary[0].totalPay.toLocaleString()} VNĐ`
+                  ? `${salary
+                      .reduce((sum, item) => sum + item.totalPay, 0)
+                      .toLocaleString()} VNĐ`
                   : "0 VNĐ"}
               </h3>
             </div>

@@ -70,7 +70,9 @@ const EmployeeList = () => {
       setModalOpen(false);
       fetchEmployees();
     } catch (error) {
-      toast.error("❌ Lỗi khi lưu nhân viên");
+      if (error.response && error.response.status === 400)
+        toast.error(`⚠️ ${error.response.data.message}`);
+      else toast.error("❌ Lỗi khi lưu nhân viên");
     }
   };
 
@@ -98,22 +100,33 @@ const EmployeeList = () => {
   };
 
   const customStyles = {
+    table: {
+      style: {
+        borderRadius: "0.5rem",
+        overflow: "hidden",
+      },
+    },
     rows: {
       style: {
         fontSize: "24px",
-        textAlign: "center",
+        paddingTop: "12px",
+        paddingBottom: "12px",
       },
     },
     headCells: {
       style: {
-        fontSize: "24px",
-        fontWeight: "bold",
+        fontSize: "20px",
+        fontWeight: "700",
+        backgroundColor: "#f9fafb",
+        color: "#111827",
+        paddingTop: "14px",
+        paddingBottom: "14px",
       },
     },
     cells: {
       style: {
-        paddingLeft: "5px",
-        paddingRight: "5px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
       },
     },
   };
@@ -251,7 +264,7 @@ const EmployeeList = () => {
                 required
                 className="w-full border p-2 rounded mb-3"
               >
-                <option value="">- - Chọn phòng ban --</option>
+                <option value="">-- Chọn phòng ban --</option>
                 {departments.map((dept) => (
                   <option key={dept._id} value={dept._id}>
                     {dept.name}

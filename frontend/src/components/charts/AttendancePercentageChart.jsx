@@ -44,10 +44,11 @@ const AttendancePercentageChart = ({ data }) => {
   };
 
   return (
-    <div className="bg-white rounded shadow p-4 w-full">
-      <h3 className="text-lg font-semibold mb-3">📈 Attendance Percentage</h3>
-      <Line data={chartData} options={options} />
-    </div>
+    // <div className="bg-white rounded shadow p-4 w-full">
+    //   <h3 className="text-lg font-semibold mb-3">📈 Attendance Percentage</h3>
+    //   <Line data={chartData} options={options} />
+    // </div>
+    <></>
   );
 };
 

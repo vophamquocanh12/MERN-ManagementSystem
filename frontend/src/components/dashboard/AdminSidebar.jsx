@@ -33,6 +33,7 @@ const AdminSidebar = () => {
           <NavLink
             key={item.to}
             to={item.to}
+            end={["/admin-dashboard"].includes(item.to)}
             className={({ isActive }) =>
               `flex items-center px-6 py-2 hover:bg-gray-700 ${
                 isActive ? "bg-teal-500" : ""

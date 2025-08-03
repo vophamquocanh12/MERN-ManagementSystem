@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/components/charts/PayrollBarChart.jsx
 import React, { useEffect, useState } from "react";
 import {
@@ -26,18 +27,19 @@ const PayrollBarChart = () => {
   }, []);
 
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h3 className="text-lg font-semibold mb-4">Payroll by Department</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data}>
-          <XAxis dataKey="department" />
-          <YAxis allowDecimals={false} />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Bar dataKey="total" fill="#6366f1" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    // <div className="bg-white p-4 rounded shadow">
+    //   <h3 className="text-lg font-semibold mb-4">Payroll by Department</h3>
+    //   <ResponsiveContainer width="100%" height={300}>
+    //     <BarChart data={data}>
+    //       <XAxis dataKey="department" />
+    //       <YAxis allowDecimals={false} />
+    //       <CartesianGrid strokeDasharray="3 3" />
+    //       <Tooltip />
+    //       <Bar dataKey="total" fill="#6366f1" />
+    //     </BarChart>
+    //   </ResponsiveContainer>
+    // </div>
+    <></>
   );
 };
 

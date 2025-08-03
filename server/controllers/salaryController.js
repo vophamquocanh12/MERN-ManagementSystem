@@ -9,49 +9,57 @@ import User from "../models/User.js";
  * Admin creates a new salary record
  */
 export const createSalaryRecord = async (req, res) => {
-   try {
-     const { employee, month, basePay, bonuses, deductions, remarks } =
-       req.body;
+  try {
+    const { employee, month, basePay, bonuses, deductions, remarks } = req.body;
 
-     if (!employee || !month || basePay === undefined) {
-       return res
-         .status(400)
-         .json({ success: false, message: "Thiếu thông tin bắt buộc." });
-     }
+    if (!employee || !month || basePay === undefined) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Thiếu thông tin bắt buộc." });
+    }
 
-     const base = Number(basePay);
-     const bon = Number(bonuses || 0);
-     const ded = Number(deductions || 0);
-     const totalPay = base + bon - ded;
+    const base = Number(basePay);
+    const bon = Number(bonuses || 0);
+    const ded = Number(deductions || 0);
+    const totalPay = base + bon - ded;
 
-     const existingSalary = await Salary.findOne({ employee, month });
-     if (existingSalary) {
-       return res.status(400).json({
-         success: false,
-         message: `Lương tháng ${month} của nhân viên đã tồn tại.`,
-       });
-     }
+    // ✅ Chuẩn hóa tháng theo định dạng YYYY-MM
+    const formattedMonth = month.slice(0, 7); // Tránh có ngày lẻ như 2025-08-01
 
-     const salary = await Salary.create({
-       employee,
-       month,
-       basePay: base,
-       bonuses: bon,
-       deductions: ded,
-       totalPay,
-       remarks,
-     });
+    // ✅ Kiểm tra xem đã có bản ghi cho nhân viên này trong tháng đó chưa
+    const existingSalary = await Salary.findOne({
+      employee,
+      month: { $regex: `^${formattedMonth}$`, $options: "i" },
+    });
 
-     await Employee.findByIdAndUpdate(employee, {
-       $push: { salary: salary._id },
-     });
+    if (existingSalary) {
+      return res.status(400).json({
+        success: false,
+        message: `Lương tháng ${formattedMonth} của nhân viên đã tồn tại.`,
+      });
+    }
 
-     res.status(201).json({ success: true, salary });
-   } catch (err) {
-     console.error("Error creating salary:", err);
-     res.status(500).json({ success: false, message: err.message });
-   }
+    const salary = await Salary.create({
+      employee,
+      month: formattedMonth,
+      basePay: base,
+      bonuses: bon,
+      deductions: ded,
+      totalPay,
+      remarks,
+    });
+
+    await Employee.findByIdAndUpdate(employee, {
+      $push: { salary: salary._id },
+    });
+
+    res.status(201).json({ success: true, salary });
+  } catch (err) {
+    console.error("Error creating salary:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
 };
+
 
 /*
   DELETE /api/salaries/:id
