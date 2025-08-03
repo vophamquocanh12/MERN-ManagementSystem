@@ -12,8 +12,8 @@ import { log } from "console";
 // ✅ 1. Create New Employee (Admin Only)
 export const createEmployee = async (req, res) => {
   try {
-    const { name, email, password, department, skills } = req.body;
-    if (!name || !email || !password || !department) {
+    const { name, email, password, department, gender, skills } = req.body;
+    if (!name || !email || !password || !department || !gender) {
       return res
         .status(400)
         .json({ success: false, message: "Missing required fields." });
@@ -41,6 +41,7 @@ export const createEmployee = async (req, res) => {
     const newEmployee = await Employee.create({
       user: newUser._id,
       department,
+      gender,
       bio: req.body.bio || "",
       skills: req.body.skills || [],
     });
@@ -88,33 +89,6 @@ export const updateEmployeeProfile = async (req, res) => {
 // ✅ 3. Admin Updates Any Employee’s Profile
 export const updateAnyEmployeeProfile = async (req, res) => {
   try {
-    // const employeeId = req.params.id;
-    // const { name, email, department } = req.body;
-
-    // // Update Employee
-    // const employee = await Employee.findByIdAndUpdate(employeeId);
-    // if (!employee) {
-    //   return res
-    //     .status(404)
-    //     .json({ success: false, error: "Employee not found" });
-    // }
-
-    // if (department) {
-    //   employee.department = department;
-    // }
-    
-    // await employee.save();
-
-    // const user = await User.findById(employee.user);
-    // if (name) {
-    //   user.name = name;
-    // }
-    // if (email) {
-    //   user.email = email;
-    // }
-    // await user.save();
-    // res.status(200).json({ success: true, employee });
-    
     const { id } = req.params; // ID của employee
     const employee = await Employee.findById(id);
     if (!employee) {

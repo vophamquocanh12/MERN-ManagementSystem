@@ -14,6 +14,7 @@ const EmployeeList = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editData, setEditData] = useState(null);
   const [departments, setDepartments] = useState([]);
+  const [gender, setGender] = useState("male");
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -158,11 +159,6 @@ const EmployeeList = () => {
   ];
 
   return (
-    // <div className="p-4">
-    //   <h2 className="text-2xl font-semibold mb-4">All Employees</h2>
-    //   {/* Replace with actual employee fetching logic */}
-    //   <p>Employee list will show here...</p>
-    // </div>
     <div className="p-6">
       <h2 className="text-xl font-semibold mb-4">Quản lý nhân viên</h2>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
@@ -205,8 +201,12 @@ const EmployeeList = () => {
                   name: e.target.name.value,
                   email: e.target.email.value,
                   password: e.target.password?.value || undefined,
+                  gender: e.target.gender.value,
                   department: e.target.department.value,
                 };
+                if (!editData) {
+                  formData.gender = gender;
+                }
                 handleFormSubmit(formData);
               }}
             >
@@ -234,7 +234,17 @@ const EmployeeList = () => {
                 className="w-full border p-2 rounded mb-3"
                 required={!editData} // chỉ required khi thêm mới
               />
-
+              {!editData && (
+                <select
+                  name="gender"
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="w-full border p-2 rounded mb-3"
+                >
+                  <option value="male">Nam</option>
+                  <option value="female">Nữ</option>
+                </select>
+              )}
               <select
                 name="department"
                 defaultValue={editData?.department?._id || ""}
