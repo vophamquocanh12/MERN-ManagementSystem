@@ -58,7 +58,7 @@ export const deleteEmployee = async (id) => {
 // API updateOwnProfile (employee)
 // Cập nhật thông tin cá nhân của nhân viên
 export const updateEmployeeProfile = async (data) => {
- const res = await api.put("/profile", data);
+ const res = await api.put("/employees/profile", data);
  return res.data;
 }
 

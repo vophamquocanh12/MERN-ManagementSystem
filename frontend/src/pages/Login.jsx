@@ -32,18 +32,23 @@ const Login = () => {
       if (success && token && user) {
         // Optional: verify selected role matches actual user role
         if (user.role !== role) {
-          toast.error(`Role mismatch: You tried to log in as ${role}, but your role is ${user.role}`);
+          toast.error(
+            `Vai trò không khớp: Bạn đã cố gắng đăng nhập với tư cách là ${role}, nhưng vai trò của bạn là ${user.role}`
+          );
           return;
         }
 
         login(user, token);
-        toast.success('Login successful ✅');
+        toast.success('Đăng nhập thành công ✅');
 
         // 🔁 Redirect based on actual user role
         const route = user.role === 'admin' ? '/admin-dashboard' : '/employee-dashboard';
         navigate(route);
       } else {
-        toast.error(resError || 'Token or user not received. Login failed.');
+        toast.error(
+          resError ||
+            "Không nhận được mã thông báo hoặc người dùng. Đăng nhập không thành công."
+        );
       }
     } catch (err) {
       const message = err?.response?.data?.error || err.message || 'Login failed.';

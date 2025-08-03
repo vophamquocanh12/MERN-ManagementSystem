@@ -13,7 +13,7 @@ const EmployeeSummary = () => {
       const res = await api.get('/salaries/my')
       setSalary(res.data.salaries)
     } catch (error) {
-      toast.error("Failed to load salary data");
+      toast.error("Không tải được dữ liệu lương");
     }
   }
   useEffect(() => {
