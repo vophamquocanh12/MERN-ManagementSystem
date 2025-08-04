@@ -5,6 +5,8 @@ import api from "@/services/api";
 import DataTable from "react-data-table-component";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+
 
 const EmployeeList = () => {
   const [employees, setEmployees] = useState([]);
@@ -14,6 +16,7 @@ const EmployeeList = () => {
   const [editData, setEditData] = useState(null);
   const [departments, setDepartments] = useState([]);
   const [gender, setGender] = useState("male");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -150,9 +153,10 @@ const EmployeeList = () => {
       name: "Hành động",
       cell: (row) => (
         <div className="flex gap-2">
-
           <button
-            onClick={() => handleEdit(row)}
+            onClick={() =>
+              navigate(`/admin-dashboard/employees/${row._id}`)
+            }
             className="text-green-600 hover:underline text-3xl"
           >
             <FaEye />
@@ -176,7 +180,7 @@ const EmployeeList = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Quản lý nhân viên</h2>
+      <h2 className="text-xl font-semibold mb-4">👤 Quản lý nhân viên</h2>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <input
           type="text"

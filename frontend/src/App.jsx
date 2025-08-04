@@ -85,7 +85,7 @@ function App() {
             <Route path="settings" element={<AdminSettings />} />
             <Route path="departments/add" element={<AddDepartment />} />
             <Route path="employees" element={<EmployeeList />} />
-            <Route path="employees/view" element={<EmployeeDetail />} />
+            <Route path="employees/:id" element={<EmployeeDetail />} />
             <Route path="employees/edit/:id" element={<EditEmployeeProfile />} />
             <Route path="calendar" element={<LeaveCalendarPage />} />
             <Route path="leaves" element={<AdminLeavePage />} />

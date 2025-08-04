@@ -37,7 +37,7 @@ const AdminSummary = () => {
   if (!stats) {
     return (
       <div className="p-6 text-gray-500 text-lg font-medium">
-        Loading admin dashboard...
+        Đang tải trang tổng quan cho quản lý...
       </div>
     );
   }

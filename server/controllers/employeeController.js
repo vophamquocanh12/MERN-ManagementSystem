@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Employee from "../models/Employee.js";
-import Salary from '../models/Salary.js'
+import Salary from "../models/Salary.js";
 import cloudinary from "../config/cloudinary.js";
 import sendEmail from "../utils/sendEmail.js";
 import Notification from "../models/notificationModel.js";
@@ -297,17 +297,22 @@ export const getOwnEmployeeProfile = async (req, res) => {
 // ✅ Get Employee by ID (Admin)
 export const getEmployeeById = async (req, res) => {
   try {
-    const { id } = req.params;
-    // Lấy thông tin User
-    const user = await User.findById(id).select("-password");
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found" });
-    }
-    // Lấy thông tin Employee liên kết với user
-    const employee = await Employee.findOne({ user: id })
-      .populate("department", "name") // chỉ lấy trường name trong Department
-      .populate("attendance") // có thể giới hạn các field nếu muốn
-      .populate("salary");
+    const { id } = req.params; // id là Employee._id
+
+    // Tìm Employee theo _id
+    const employee = await Employee.findById(id)
+      .populate({
+        path: "user",
+        select: "name email", // Chỉ lấy name và email từ User
+      })
+      .populate({
+        path: "department",
+        select: "name",
+      })
+      .populate({
+        path: "salary",
+        options: { sort: { createdAt: -1 } }, // sắp xếp theo thời gian mới nhất
+      });
 
     if (!employee) {
       return res
@@ -317,8 +322,7 @@ export const getEmployeeById = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      user,
-      employee,
+      employee, // Bao gồm cả user và salary
     });
   } catch (error) {
     console.error("❌ Error in getEmployeeById:", error);

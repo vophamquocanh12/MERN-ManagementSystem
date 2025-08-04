@@ -146,7 +146,7 @@ const customStyles = {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Quản lý phòng ban</h2>
+      <h2 className="text-xl font-semibold mb-4">🏢 Quản lý phòng ban</h2>
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <input
