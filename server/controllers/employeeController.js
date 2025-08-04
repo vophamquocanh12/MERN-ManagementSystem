@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Employee from "../models/Employee.js";
+import Salary from '../models/Salary.js'
 import cloudinary from "../config/cloudinary.js";
 import sendEmail from "../utils/sendEmail.js";
 import Notification from "../models/notificationModel.js";
@@ -140,19 +141,29 @@ export const deleteEmployee = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Nếu bạn dùng liên kết với User
-    const employee = await Employee.findByIdAndDelete(id);
+    // Tìm nhân viên
+    const employee = await Employee.findById(id);
     if (!employee)
       return res.status(404).json({ message: "Không tìm thấy nhân viên" });
 
-    //Xoá các salary liên kết
-    if (employee.salary && employee.salary.length > 0) {
-      await Salary.deleteMany({ _id: { $in: employee.salary } });
+    // Kiểm tra xem có bản lương nào không
+    const salaryCount = await Salary.countDocuments({ employee: id });
+
+    // Xoá bản lương nếu có
+    if (salaryCount > 0) {
+      await Salary.deleteMany({ employee: id });
     }
-    // Có thể xoá luôn User nếu cần
+
+    // Xoá nhân viên và user liên kết
+    await Employee.findByIdAndDelete(id);
     await User.findByIdAndDelete(employee.user);
 
-    res.status(200).json({ message: "Xóa thành công" });
+    const message =
+      salaryCount > 0
+        ? "🗑️ Đã xóa nhân viên và các bản lương liên quan."
+        : "🗑️ Đã xóa nhân viên (không có bản lương).";
+
+    res.status(200).json({ message });
   } catch (err) {
     console.error("Delete employee error:", err);
     res.status(500).json({ success: false, error: err.message });

@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
 // src/pages/admin/EmployeeList.jsx
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import api from "@/services/api";
 import DataTable from "react-data-table-component";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { io } from "socket.io-client";
 
 const EmployeeList = () => {
@@ -70,9 +69,11 @@ const EmployeeList = () => {
       setModalOpen(false);
       fetchEmployees();
     } catch (error) {
-      if (error.response && error.response.status === 400)
+      if (error.response && error.response.status === 400) {
         toast.error(`⚠️ ${error.response.data.message}`);
-      else toast.error("❌ Lỗi khi lưu nhân viên");
+      } else {
+        toast.error("❌ Lỗi khi lưu nhân viên");
+      }
     }
   };
 
@@ -90,9 +91,9 @@ const EmployeeList = () => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa nhân viên này không?"))
       return;
     try {
-      await api.delete(`/employees/${id}`);
+      const res = await api.delete(`/employees/${id}`);
       setEmployees((prev) => prev.filter((emp) => emp._id !== id));
-      toast.success("🗑️ Nhân viên đã được xóa");
+      toast.success(res.data.message);
     } catch (error) {
       console.error("Xóa thất bại:", error);
       toast.error("❌ Lỗi khi xóa nhân viên");
@@ -146,14 +147,16 @@ const EmployeeList = () => {
       sortable: true,
     },
     {
-      name: "Lương",
-      selector: (row) => row.salary?.[0]?.totalPay.toLocaleString() || 0,
-      sortable: true,
-    },
-    {
       name: "Hành động",
       cell: (row) => (
         <div className="flex gap-2">
+
+          <button
+            onClick={() => handleEdit(row)}
+            className="text-green-600 hover:underline text-3xl"
+          >
+            <FaEye />
+          </button>
           <button
             onClick={() => handleEdit(row)}
             className="text-blue-600 hover:underline text-3xl"
@@ -214,7 +217,6 @@ const EmployeeList = () => {
                   name: e.target.name.value,
                   email: e.target.email.value,
                   password: e.target.password?.value || undefined,
-                  gender: e.target.gender.value,
                   department: e.target.department.value,
                 };
                 if (!editData) {

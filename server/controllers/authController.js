@@ -50,12 +50,12 @@ export const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ success: false, error: 'User Not Found' });
+      return res.status(404).json({ success: false, error: 'Không tìm thấy người dùng' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ success: false, error: 'Incorrect Password' });
+      return res.status(401).json({ success: false, error: 'Sai mật khẩu' });
     }
 
     const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, {

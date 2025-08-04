@@ -23,6 +23,7 @@ import Departments from "./pages/departments/DepartmentList";
 import AddDepartment from "./pages/departments/AddDepartment";
 import EditEmployeeProfile from "./pages/admin/EditEmployeeProfile";
 import EmployeeList from "./pages/admin/EmployeeList";
+import EmployeeDetail from './pages/admin/EmployeeDetail'
 import LeaveCalendarPage from "./pages/admin/LeaveCalendarPage";
 import AdminSalaryPage from "./pages/admin/AdminSalaryPage";
 import AdminLeavePage from "./pages/admin/AdminLeavePage";
@@ -84,6 +85,7 @@ function App() {
             <Route path="settings" element={<AdminSettings />} />
             <Route path="departments/add" element={<AddDepartment />} />
             <Route path="employees" element={<EmployeeList />} />
+            <Route path="employees/view" element={<EmployeeDetail />} />
             <Route path="employees/edit/:id" element={<EditEmployeeProfile />} />
             <Route path="calendar" element={<LeaveCalendarPage />} />
             <Route path="leaves" element={<AdminLeavePage />} />
