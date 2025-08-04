@@ -201,6 +201,7 @@ const EmployeeList = () => {
       <DataTable
         columns={columns}
         data={filtered}
+        noDataComponent="Chưa có nhân viên"
         pagination
         highlightOnHover
         striped

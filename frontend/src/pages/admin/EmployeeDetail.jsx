@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "@/services/api";
 import male from "../../assets/image/male.jpg";
+import female from "../../assets/image/female.jpg"
 import DataTable from "react-data-table-component";
 
 const EmployeeDetail = () => {
@@ -69,13 +70,13 @@ const EmployeeDetail = () => {
 
           <div className="flex items-center gap-5 mb-5">
             <img
-              src={male}
+              src={employee?.gender === "male" ? male : female}
               alt="Profile"
               className="w-24 h-24 rounded-full object-cover border"
             />
             <div>
-              <h3 className="text-xl font-semibold">{user.name}</h3>
-              <p className="text-gray-600">{user.email}</p>
+              <h3 className="text-xl font-semibold">🪪 {user.name}</h3>
+              <p className="text-xl text-gray-600">📬 {user.email}</p>
             </div>
           </div>
 
@@ -108,20 +109,6 @@ const EmployeeDetail = () => {
                 : "Không có kỹ năng."}
             </p>
           </div>
-
-          {employee.resume && (
-            <div className="mb-4">
-              <strong className="text-gray-700">Resume:</strong>{" "}
-              <a
-                href={employee.resume}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-600 underline"
-              >
-                📄 Xem hồ sơ
-              </a>
-            </div>
-          )}
         </div>
 
         {/* Cột phải: Bảng lương */}
@@ -134,8 +121,10 @@ const EmployeeDetail = () => {
             data={employee.salary || []}
             pagination
             highlightOnHover
+            noDataComponent="Chưa có dữ liệu lương"
             striped
             responsive
+            noContextMenu="Chưa có dữ liệu"
             customStyles={{
               rows: { style: { fontSize: "16px" } },
               headCells: { style: { fontSize: "18px", fontWeight: "bold" } },
@@ -144,10 +133,11 @@ const EmployeeDetail = () => {
 
           {employee.salary?.length > 0 && (
             <div className="text-right mt-4 text-lg font-semibold text-gray-700">
-              Tổng cộng: {" "} 
+              Tổng cộng:{" "}
               {employee.salary
                 .reduce((sum, sal) => sum + (sal.totalPay || 0), 0)
-                .toLocaleString("vi-VN")} VNĐ
+                .toLocaleString("vi-VN")}{" "}
+              VNĐ
             </div>
           )}
         </div>

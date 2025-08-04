@@ -175,6 +175,7 @@ const customStyles = {
       <DataTable
         columns={columns}
         data={filtered}
+        noDataComponent="Chưa có dữ liệu phòng ban"
         pagination
         highlightOnHover
         striped

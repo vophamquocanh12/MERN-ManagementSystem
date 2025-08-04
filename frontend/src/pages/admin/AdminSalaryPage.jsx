@@ -206,6 +206,7 @@ const AdminSalaryPage = () => {
       <DataTable
         columns={columns}
         data={filtered}
+        noDataComponent="Chưa có dữ liệu lương"
         customStyles={customStyles}
         pagination
         highlightOnHover
