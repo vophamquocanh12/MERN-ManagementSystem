@@ -65,7 +65,7 @@ const AdminSummary = () => {
 
   return (
     <div className="p-6 space-y-6 m-0">
-      <h2 className="text-2xl font-bold mb-4">📊 Dashboard Overview</h2>
+      <h2 className="text-2xl font-bold mb-4">📊 Tổng quan</h2>
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-3 lg:grid-cols-3">
         {summaryData.map((item) => (
